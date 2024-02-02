@@ -4,6 +4,8 @@
 
 import 'dart:async';
 import 'dart:html';
+import 'dart:js_interop';
+import 'dart:js_util';
 
 import 'package:js/js.dart';
 
@@ -22,6 +24,9 @@ typedef void OnMessageListener(dynamic message, MessageSender sender, SendRespon
 
 @JS()
 external Chrome get chrome;
+
+@JS('self')
+external JSObject get jsSelf;
 
 @JS()
 @anonymous
@@ -358,7 +363,7 @@ class OnMessageHandler {
 @JS()
 @anonymous
 class MessageSender {
-  // external String? get id;
+  external String? get id;
   external Tab? get tab;
   external String? get url;
   external factory MessageSender({String? id, String? url, Tab? tab});
@@ -456,20 +461,13 @@ class OnActivatedHandler {
 @JS()
 @anonymous
 class OnRemovedHandler {
-  external void addListener(void Function(int tabId, RemoveInfo info) callback);
+  external void addListener(void Function(int tabId, dynamic info) callback);
 }
 
 @JS()
 @anonymous
 class ActiveInfo {
   external int get tabId;
-}
-
-@JS()
-@anonymous
-class RemoveInfo {
-  external bool get isWindowClosing;
-  external int get windowId;
 }
 
 @JS()
