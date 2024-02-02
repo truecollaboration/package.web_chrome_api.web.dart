@@ -1,0 +1,16 @@
+name: web_chrome_api
+description: A starting point for Dart libraries or applications.
+version: 0.0.1
+homepage:
+publish_to: none
+
+environment:
+  sdk: '>=3.1.1 <4.0.0'
+  
+dependencies:
+  meta: any
+  js: any
+
+  true_core:
+    git:
+      url: https://github.com/TrueCollaboration/package.true_core.dart.git
