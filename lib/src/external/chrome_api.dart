@@ -7,7 +7,7 @@ import 'dart:html';
 import 'dart:js_interop';
 import 'dart:js_util';
 
-import 'package:js/js.dart';
+import 'package:js/js.dart' as js;
 
 // import 'package:js/js.dart';
 
@@ -22,19 +22,20 @@ typedef void OnMessageListener(dynamic message, MessageSender sender, SendRespon
 
 
 
-@JS()
+@js.JS()
 external Chrome get chrome;
 
-@JS('self')
+@js.JS('self')
 external JSObject get jsSelf;
 
-@JS()
+@js.JS()
 @anonymous
 class Chrome {
   external Debugger get debugger;
   external Devtools get devtools;
   external Notifications get notifications;
   external Runtime? get runtime;
+  external Scripting get scripting;
   external Storage get storage;
   external Tabs get tabs;
   external WebNavigation get webNavigation;
@@ -44,7 +45,7 @@ class Chrome {
 /// chrome.debugger APIs:
 /// https://developer.chrome.com/docs/extensions/reference/debugger
 
-@JS()
+@js.JS()
 @anonymous
 class Debugger {
   external void attach(
@@ -67,7 +68,7 @@ class Debugger {
   external OnEventHandler get onEvent;
 }
 
-@JS()
+@js.JS()
 @anonymous
 class OnDetachHandler {
   external void addListener(
@@ -75,7 +76,7 @@ class OnDetachHandler {
   );
 }
 
-@JS()
+@js.JS()
 @anonymous
 class OnEventHandler {
   external void addListener(
@@ -83,7 +84,7 @@ class OnEventHandler {
   );
 }
 
-@JS()
+@js.JS()
 @anonymous
 class Debuggee {
   external int get tabId;
@@ -94,7 +95,7 @@ class Debuggee {
 
 /// chrome.devtools APIs:
 
-@JS()
+@js.JS()
 @anonymous
 class Devtools {
   // https://developer.chrome.com/docs/extensions/reference/devtools_inspectedWindow
@@ -104,13 +105,13 @@ class Devtools {
   external Panels get panels;
 }
 
-@JS()
+@js.JS()
 @anonymous
 class InspectedWindow {
   external int get tabId;
 }
 
-@JS()
+@js.JS()
 @anonymous
 class Panels {
   external String get themeName;
@@ -123,20 +124,20 @@ class Panels {
   );
 }
 
-@JS()
+@js.JS()
 @anonymous
 class ExtensionPanel {
   external OnHiddenHandler get onHidden;
   external OnShownHandler get onShown;
 }
 
-@JS()
+@js.JS()
 @anonymous
 class OnHiddenHandler {
   external void addListener(void Function() callback);
 }
 
-@JS()
+@js.JS()
 @anonymous
 class OnShownHandler {
   external void addListener(void Function(Window window) callback);
@@ -145,7 +146,7 @@ class OnShownHandler {
 /// chrome.notification APIs:
 /// https://developer.chrome.com/docs/extensions/reference/notifications
 
-@JS()
+@js.JS()
 @anonymous
 class Notifications {
   external void create(
@@ -155,7 +156,7 @@ class Notifications {
   );
 }
 
-@JS()
+@js.JS()
 @anonymous
 class NotificationOptions {
   external factory NotificationOptions({
@@ -167,7 +168,7 @@ class NotificationOptions {
 }
 
 
-@JS()
+@js.JS()
 @anonymous
 class Manifest {
   external int manifestVersion;
@@ -230,7 +231,7 @@ class Manifest {
 /// chrome.runtime APIs:
 /// https://developer.chrome.com/docs/extensions/reference/runtime
 
-@JS()
+@js.JS()
 @anonymous
 class Runtime {
   external Port connect(String? extensionId, ConnectInfo? info);
@@ -276,19 +277,19 @@ extension RuntimeEx on Runtime {
   
 }
 
-@JS()
+@js.JS()
 class ChromeError {
   external String get message;
 }
 
-@JS()
+@js.JS()
 @anonymous
 class ConnectInfo {
   external String? get name;
   external factory ConnectInfo({String? name});
 }
 
-@JS()
+@js.JS()
 @anonymous
 class Port {
   external String? get name;
@@ -304,7 +305,7 @@ class Port {
   external void disconnect();
 }
 
-@JS()
+@js.JS()
 @anonymous
 class OnConnectPortHandler {
   external void addListener(OnPortListener listener);
@@ -318,7 +319,7 @@ class OnConnectPortHandler {
   external void removeListener(OnPortListener listener);
 }
 
-@JS()
+@js.JS()
 @anonymous
 class OnMessagePortHandler {
   external void addListener(OnPortMessageListener listener);
@@ -332,7 +333,7 @@ class OnMessagePortHandler {
   external void removeListener(OnPortMessageListener listener);
 }
 
-@JS()
+@js.JS()
 @anonymous
 class OnDisconnectPortHandler {
   external void addListener(OnPortListener listener);
@@ -346,7 +347,7 @@ class OnDisconnectPortHandler {
   external void removeListener(OnPortListener listener);
 }
 
-@JS()
+@js.JS()
 @anonymous
 class OnMessageHandler {
   external void addListener(OnMessageListener listener);
@@ -360,7 +361,7 @@ class OnMessageHandler {
   external void removeListener(OnMessageListener listener);
 }
 
-@JS()
+@js.JS()
 @anonymous
 class MessageSender {
   external String? get id;
@@ -369,17 +370,91 @@ class MessageSender {
   external factory MessageSender({String? id, String? url, Tab? tab});
 }
 
-@JS()
+@js.JS()
 @anonymous
 class Target {
   external int get tabId;
   external factory Target({int tabId});
 }
 
+/// chrome.scripting APIs
+/// https://developer.chrome.com/docs/extensions/reference/api/scripting
+
+@js.JS()
+@anonymous
+class Scripting {
+  external Future<List<RegisteredContentScript>> getRegisteredContentScripts(
+    ContentScriptFilter filter,
+    void Function(List<RegisteredContentScript> scripts)? callback,
+  );
+  
+  external Future<void> registerContentScripts(
+    List<RegisteredContentScript> scripts,
+    void Function()? callback,
+  );
+  
+  external Future<void> updateContentScripts(
+    List<RegisteredContentScript> scripts,
+    void Function()? callback,
+  );
+  
+  external Future<void> unregisterContentScripts(
+    ContentScriptFilter filter,
+    void Function()? callback,
+  );
+}
+
+@js.JS()
+@anonymous
+class RegisteredContentScript {
+  external factory RegisteredContentScript({
+    bool? allFrames,
+    List<String>? css,
+    bool? excludeMatches,
+    required int id,
+    List<String>? js,
+    bool? matchOriginAsFallback,
+    List<String>? matches,
+    bool? persistAcrossSessions,
+    String? runAt,
+    String? world,
+  });
+
+  external bool get allFrames;
+
+  external List<String> get css;
+
+  external List<String> get excludeMatches;
+
+  external String get id;
+
+  external List<String> get js;
+
+  external bool get matchOriginAsFallback;
+
+  external List<String> get matches;
+
+  external bool get persistAcrossSessions;
+
+  external String get runAt;
+
+  external String get world;
+}
+
+@js.JS()
+@anonymous
+class ContentScriptFilter {
+  external factory ContentScriptFilter({
+    List<String>? ids,
+  });
+
+  external List<String> get ids;
+}
+
 /// chrome.storage APIs
 /// https://developer.chrome.com/docs/extensions/reference/storage
 
-@JS()
+@js.JS()
 @anonymous
 class Storage {
   external StorageArea get local;
@@ -389,7 +464,7 @@ class Storage {
   external OnChangedHandler get onChanged;
 }
 
-@JS()
+@js.JS()
 @anonymous
 class StorageArea {
   external Object get(List<String> keys, void Function(Object result) callback);
@@ -399,7 +474,7 @@ class StorageArea {
   external Object remove(List<String> keys, void Function()? callback);
 }
 
-@JS()
+@js.JS()
 @anonymous
 class OnChangedHandler {
   external void addListener(
@@ -410,7 +485,7 @@ class OnChangedHandler {
 /// chrome.tabs APIs
 /// https://developer.chrome.com/docs/extensions/reference/tabs
 
-@JS()
+@js.JS()
 @anonymous
 class Tabs {
   external dynamic query(
@@ -452,25 +527,25 @@ extension TabsEx on Tabs {
   
 }
 
-@JS()
+@js.JS()
 @anonymous
 class OnActivatedHandler {
   external void addListener(void Function(ActiveInfo activeInfo) callback);
 }
 
-@JS()
+@js.JS()
 @anonymous
 class OnRemovedHandler {
   external void addListener(void Function(int tabId, dynamic info) callback);
 }
 
-@JS()
+@js.JS()
 @anonymous
 class ActiveInfo {
   external int get tabId;
 }
 
-@JS()
+@js.JS()
 @anonymous
 class TabInfo {
   external bool? get active;
@@ -479,7 +554,7 @@ class TabInfo {
   external factory TabInfo({bool? active, bool? pinned, String? url});
 }
 
-@JS()
+@js.JS()
 @anonymous
 class QueryInfo {
   external bool get active;
@@ -488,7 +563,7 @@ class QueryInfo {
   external factory QueryInfo({bool? active, bool? currentWindow, String? url});
 }
 
-@JS()
+@js.JS()
 @anonymous
 class Tab {
   external int get id;
@@ -498,20 +573,20 @@ class Tab {
 /// chrome.webNavigation APIs
 /// https://developer.chrome.com/docs/extensions/reference/webNavigation
 
-@JS()
+@js.JS()
 @anonymous
 class WebNavigation {
   // https://developer.chrome.com/docs/extensions/reference/webNavigation/#event-onCommitted
   external OnCommittedHandler get onCommitted;
 }
 
-@JS()
+@js.JS()
 @anonymous
 class OnCommittedHandler {
   external void addListener(void Function(NavigationInfo details) callback);
 }
 
-@JS()
+@js.JS()
 @anonymous
 class NavigationInfo {
   external String get transitionType;
@@ -522,7 +597,7 @@ class NavigationInfo {
 /// chrome.windows APIs
 /// https://developer.chrome.com/docs/extensions/reference/windows
 
-@JS()
+@js.JS()
 @anonymous
 class Windows {
   external dynamic create(WindowInfo? createData, Function(WindowObj) callback);
@@ -530,13 +605,13 @@ class Windows {
   external OnFocusChangedHandler get onFocusChanged;
 }
 
-@JS()
+@js.JS()
 @anonymous
 class OnFocusChangedHandler {
   external void addListener(void Function(int windowId) callback);
 }
 
-@JS()
+@js.JS()
 @anonymous
 class WindowInfo {
   external bool? get focused;
@@ -544,7 +619,7 @@ class WindowInfo {
   external factory WindowInfo({bool? focused, String? url});
 }
 
-@JS()
+@js.JS()
 @anonymous
 class WindowObj {
   external int get id;
