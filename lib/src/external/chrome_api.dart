@@ -35,7 +35,7 @@ class Chrome {
   external Devtools get devtools;
   external Notifications get notifications;
   external Runtime? get runtime;
-  external Scripting get scripting;
+  external Scripting? get scripting;
   external Storage get storage;
   external Tabs get tabs;
   external WebNavigation get webNavigation;
@@ -383,25 +383,25 @@ class Target {
 @js.JS()
 @anonymous
 class Scripting {
-  external Future<List<RegisteredContentScript>> getRegisteredContentScripts(
-    ContentScriptFilter filter,
+  external Future<List<RegisteredContentScript>> getRegisteredContentScripts([
+    ContentScriptFilter? filter,
     void Function(List<RegisteredContentScript> scripts)? callback,
-  );
+  ]);
   
   external Future<void> registerContentScripts(
-    List<RegisteredContentScript> scripts,
-    void Function()? callback,
-  );
+    List<RegisteredContentScript> scripts, [
+      void Function()? callback,
+  ]);
   
   external Future<void> updateContentScripts(
-    List<RegisteredContentScript> scripts,
-    void Function()? callback,
-  );
+    List<RegisteredContentScript> scripts, [
+      void Function()? callback,
+  ]);
   
-  external Future<void> unregisterContentScripts(
+  external Future<void> unregisterContentScripts([
     ContentScriptFilter filter,
     void Function()? callback,
-  );
+  ]);
 }
 
 @js.JS()
@@ -411,7 +411,7 @@ class RegisteredContentScript {
     bool? allFrames,
     List<String>? css,
     bool? excludeMatches,
-    required int id,
+    required String id,
     List<String>? js,
     bool? matchOriginAsFallback,
     List<String>? matches,
