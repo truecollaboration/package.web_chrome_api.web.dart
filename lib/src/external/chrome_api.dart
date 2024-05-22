@@ -3,13 +3,10 @@
 // BSD-style license that can be found in the LICENSE file.
 
 import 'dart:async';
-import 'dart:html';
 import 'dart:js_interop';
 import 'dart:js_util';
 
-import 'package:js/js.dart' as js;
-
-// import 'package:js/js.dart';
+import 'package:web/web.dart';
 
 typedef void SendResponseFunction(dynamic response);
 typedef void OnPortListener(Port port);
@@ -22,13 +19,13 @@ typedef void OnMessageListener(dynamic message, MessageSender sender, SendRespon
 
 
 
-@js.JS()
+@JS()
 external Chrome get chrome;
 
-@js.JS('self')
+@JS('self')
 external JSObject get jsSelf;
 
-@js.JS()
+@JS()
 @anonymous
 class Chrome {
   external Debugger get debugger;
@@ -45,7 +42,7 @@ class Chrome {
 /// chrome.debugger APIs:
 /// https://developer.chrome.com/docs/extensions/reference/debugger
 
-@js.JS()
+@JS()
 @anonymous
 class Debugger {
   external void attach(
@@ -68,7 +65,7 @@ class Debugger {
   external OnEventHandler get onEvent;
 }
 
-@js.JS()
+@JS()
 @anonymous
 class OnDetachHandler {
   external void addListener(
@@ -76,7 +73,7 @@ class OnDetachHandler {
   );
 }
 
-@js.JS()
+@JS()
 @anonymous
 class OnEventHandler {
   external void addListener(
@@ -84,7 +81,7 @@ class OnEventHandler {
   );
 }
 
-@js.JS()
+@JS()
 @anonymous
 class Debuggee {
   external int get tabId;
@@ -95,7 +92,7 @@ class Debuggee {
 
 /// chrome.devtools APIs:
 
-@js.JS()
+@JS()
 @anonymous
 class Devtools {
   // https://developer.chrome.com/docs/extensions/reference/devtools_inspectedWindow
@@ -105,13 +102,13 @@ class Devtools {
   external Panels get panels;
 }
 
-@js.JS()
+@JS()
 @anonymous
 class InspectedWindow {
   external int get tabId;
 }
 
-@js.JS()
+@JS()
 @anonymous
 class Panels {
   external String get themeName;
@@ -124,20 +121,20 @@ class Panels {
   );
 }
 
-@js.JS()
+@JS()
 @anonymous
 class ExtensionPanel {
   external OnHiddenHandler get onHidden;
   external OnShownHandler get onShown;
 }
 
-@js.JS()
+@JS()
 @anonymous
 class OnHiddenHandler {
   external void addListener(void Function() callback);
 }
 
-@js.JS()
+@JS()
 @anonymous
 class OnShownHandler {
   external void addListener(void Function(Window window) callback);
@@ -146,7 +143,7 @@ class OnShownHandler {
 /// chrome.notification APIs:
 /// https://developer.chrome.com/docs/extensions/reference/notifications
 
-@js.JS()
+@JS()
 @anonymous
 class Notifications {
   external void create(
@@ -156,7 +153,7 @@ class Notifications {
   );
 }
 
-@js.JS()
+@JS()
 @anonymous
 class NotificationOptions {
   external factory NotificationOptions({
@@ -168,7 +165,7 @@ class NotificationOptions {
 }
 
 
-@js.JS()
+@JS()
 @anonymous
 class Manifest {
   external int manifestVersion;
@@ -231,7 +228,7 @@ class Manifest {
 /// chrome.runtime APIs:
 /// https://developer.chrome.com/docs/extensions/reference/runtime
 
-@js.JS()
+@JS()
 @anonymous
 class Runtime {
   external Port connect(String? extensionId, ConnectInfo? info);
@@ -277,19 +274,19 @@ extension RuntimeEx on Runtime {
   
 }
 
-@js.JS()
+@JS()
 class ChromeError {
   external String get message;
 }
 
-@js.JS()
+@JS()
 @anonymous
 class ConnectInfo {
   external String? get name;
   external factory ConnectInfo({String? name});
 }
 
-@js.JS()
+@JS()
 @anonymous
 class Port {
   external String? get name;
@@ -305,7 +302,7 @@ class Port {
   external void disconnect();
 }
 
-@js.JS()
+@JS()
 @anonymous
 class OnConnectPortHandler {
   external void addListener(OnPortListener listener);
@@ -319,7 +316,7 @@ class OnConnectPortHandler {
   external void removeListener(OnPortListener listener);
 }
 
-@js.JS()
+@JS()
 @anonymous
 class OnMessagePortHandler {
   external void addListener(OnPortMessageListener listener);
@@ -333,7 +330,7 @@ class OnMessagePortHandler {
   external void removeListener(OnPortMessageListener listener);
 }
 
-@js.JS()
+@JS()
 @anonymous
 class OnDisconnectPortHandler {
   external void addListener(OnPortListener listener);
@@ -347,7 +344,7 @@ class OnDisconnectPortHandler {
   external void removeListener(OnPortListener listener);
 }
 
-@js.JS()
+@JS()
 @anonymous
 class OnMessageHandler {
   external void addListener(OnMessageListener listener);
@@ -361,7 +358,7 @@ class OnMessageHandler {
   external void removeListener(OnMessageListener listener);
 }
 
-@js.JS()
+@JS()
 @anonymous
 class MessageSender {
   external String? get id;
@@ -370,7 +367,7 @@ class MessageSender {
   external factory MessageSender({String? id, String? url, Tab? tab});
 }
 
-@js.JS()
+@JS()
 @anonymous
 class Target {
   external int get tabId;
@@ -380,7 +377,7 @@ class Target {
 /// chrome.scripting APIs
 /// https://developer.chrome.com/docs/extensions/reference/api/scripting
 
-@js.JS()
+@JS()
 @anonymous
 class Scripting {
   external Future<List<RegisteredContentScript>> getRegisteredContentScripts([
@@ -404,7 +401,7 @@ class Scripting {
   ]);
 }
 
-@js.JS()
+@JS()
 @anonymous
 class RegisteredContentScript {
   external factory RegisteredContentScript({
@@ -441,7 +438,7 @@ class RegisteredContentScript {
   external String get world;
 }
 
-@js.JS()
+@JS()
 @anonymous
 class ContentScriptFilter {
   external factory ContentScriptFilter({
@@ -454,7 +451,7 @@ class ContentScriptFilter {
 /// chrome.storage APIs
 /// https://developer.chrome.com/docs/extensions/reference/storage
 
-@js.JS()
+@JS()
 @anonymous
 class Storage {
   external StorageArea get local;
@@ -464,7 +461,7 @@ class Storage {
   external OnChangedHandler get onChanged;
 }
 
-@js.JS()
+@JS()
 @anonymous
 class StorageArea {
   external Object get(List<String> keys, void Function(Object result) callback);
@@ -474,7 +471,7 @@ class StorageArea {
   external Object remove(List<String> keys, void Function()? callback);
 }
 
-@js.JS()
+@JS()
 @anonymous
 class OnChangedHandler {
   external void addListener(
@@ -485,7 +482,7 @@ class OnChangedHandler {
 /// chrome.tabs APIs
 /// https://developer.chrome.com/docs/extensions/reference/tabs
 
-@js.JS()
+@JS()
 @anonymous
 class Tabs {
   external dynamic query(
@@ -527,25 +524,25 @@ extension TabsEx on Tabs {
   
 }
 
-@js.JS()
+@JS()
 @anonymous
 class OnActivatedHandler {
   external void addListener(void Function(ActiveInfo activeInfo) callback);
 }
 
-@js.JS()
+@JS()
 @anonymous
 class OnRemovedHandler {
   external void addListener(void Function(int tabId, dynamic info) callback);
 }
 
-@js.JS()
+@JS()
 @anonymous
 class ActiveInfo {
   external int get tabId;
 }
 
-@js.JS()
+@JS()
 @anonymous
 class TabInfo {
   external bool? get active;
@@ -554,7 +551,7 @@ class TabInfo {
   external factory TabInfo({bool? active, bool? pinned, String? url});
 }
 
-@js.JS()
+@JS()
 @anonymous
 class QueryInfo {
   external bool get active;
@@ -563,7 +560,7 @@ class QueryInfo {
   external factory QueryInfo({bool? active, bool? currentWindow, String? url});
 }
 
-@js.JS()
+@JS()
 @anonymous
 class Tab {
   external int get id;
@@ -573,20 +570,20 @@ class Tab {
 /// chrome.webNavigation APIs
 /// https://developer.chrome.com/docs/extensions/reference/webNavigation
 
-@js.JS()
+@JS()
 @anonymous
 class WebNavigation {
   // https://developer.chrome.com/docs/extensions/reference/webNavigation/#event-onCommitted
   external OnCommittedHandler get onCommitted;
 }
 
-@js.JS()
+@JS()
 @anonymous
 class OnCommittedHandler {
   external void addListener(void Function(NavigationInfo details) callback);
 }
 
-@js.JS()
+@JS()
 @anonymous
 class NavigationInfo {
   external String get transitionType;
@@ -597,7 +594,7 @@ class NavigationInfo {
 /// chrome.windows APIs
 /// https://developer.chrome.com/docs/extensions/reference/windows
 
-@js.JS()
+@JS()
 @anonymous
 class Windows {
   external dynamic create(WindowInfo? createData, Function(WindowObj) callback);
@@ -605,13 +602,13 @@ class Windows {
   external OnFocusChangedHandler get onFocusChanged;
 }
 
-@js.JS()
+@JS()
 @anonymous
 class OnFocusChangedHandler {
   external void addListener(void Function(int windowId) callback);
 }
 
-@js.JS()
+@JS()
 @anonymous
 class WindowInfo {
   external bool? get focused;
@@ -619,7 +616,7 @@ class WindowInfo {
   external factory WindowInfo({bool? focused, String? url});
 }
 
-@js.JS()
+@JS()
 @anonymous
 class WindowObj {
   external int get id;
